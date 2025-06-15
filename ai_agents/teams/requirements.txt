@@ -1,0 +1,8 @@
+openai
+duckduckgo-search
+newspaper4k
+lxml_html_clean
+agno
+dotenv
+pymongo
+groq
