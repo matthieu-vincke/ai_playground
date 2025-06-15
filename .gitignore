@@ -1,2 +1,5 @@
 venv
 .env
+agent-ui
+ai_agents/playground/__pycache__
+tmp/

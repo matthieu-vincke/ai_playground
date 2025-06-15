@@ -10,7 +10,8 @@ from agno.team import Team
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.hackernews import HackerNewsTools
 from agno.tools.newspaper4k import Newspaper4kTools
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, Field
+from agno.models.groq import Groq
 
 from dotenv import load_dotenv
 # Load environment variables from .env file
@@ -21,23 +22,27 @@ db_url = os.getenv("MONGO_CONNECTION_STRING")
 
 
 class Article(BaseModel):
-    title: str
-    summary: str
-    reference_links: List[str]
+    title: str = Field(..., description="The title of the article.")
+    summary: str = Field(..., description="A summary of the article.")
+    reference_links: List[str] = Field(..., description="A list of reference links.")
 
 class Articles(BaseModel):
-    articles: List[Article]
+    articles: List[Article] = Field(..., description="A list of articles.")
 
 hn_researcher = Agent(
     name="HackerNews Researcher",
-    model=OpenAIChat("gpt-4o"),
+    model=Groq(
+        id="llama-3.3-70b-versatile"
+    ), 
     role="Gets top stories from hackernews.",
     tools=[HackerNewsTools()],
 )
 
 web_searcher = Agent(
     name="Web Searcher",
-    model=OpenAIChat("gpt-4o"),
+    model=Groq(
+        id="llama-3.3-70b-versatile"
+    ), 
     role="Searches the web for information on a topic",
     tools=[DuckDuckGoTools()],
     add_datetime_to_instructions=True,
@@ -52,8 +57,10 @@ article_reader = Agent(
 
 hn_team = Team(
     name="HackerNews Team",
-    mode="coordinate",
-    model=OpenAIChat("gpt-4o"),
+    mode="collaborate",
+    model=Groq(
+        id="llama-3.3-70b-versatile"
+    ), 
     members=[hn_researcher, web_searcher, article_reader],
     storage=MongoDbStorage(
         collection_name="team_sessions", db_url=db_url, db_name="agno"

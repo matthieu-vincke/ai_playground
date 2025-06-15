@@ -6,3 +6,7 @@ agno
 dotenv
 pymongo
 groq
+fastapi
+sqlalchemy
+yfinance
+uvicorn
