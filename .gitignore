@@ -3,3 +3,7 @@ venv
 agent-ui
 ai_agents/playground/__pycache__
 tmp/
+crawler/downloads_async
+crawler/__pycache__
+utils/__pycache__
+downloads
