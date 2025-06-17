@@ -24,6 +24,7 @@ import pickle
 from bson.binary import Binary, USER_DEFINED_SUBTYPE
 from bson.codec_options import TypeCodec, TypeRegistry, CodecOptions
 import numpy as np
+from agno.models.openrouter import OpenRouter
 
 
 # Import logger
@@ -211,12 +212,13 @@ async def main(website_url: str, insert : bool = True, recreate: bool = False, s
     logger.info("CombinedKnowledgeBase initialized with HTML and PDF sources.")
     logger.info("Initializing Agent...")
     agent = Agent(
-        # model=OpenAIChat(id="gpt-4.1-mini"),
-        model=Groq(
-            id="llama-3.3-70b-versatile"
-        ),  # Response is OK, not as good as openAI
+        model=OpenRouter(id="gpt-4o-mini"),
+        #model=OpenAIChat(id="gpt-4o-mini"),
+        # model=Groq(
+        #     id="llama-3.3-70b-versatile"
+        # ),  # Response is OK, not as good as openAI
         knowledge=knowledge_base,
-        # tools=[TavilyTools()],
+        tools=[TavilyTools()],
         search_knowledge=True,
         session_id="crawl-store-query-session",
         storage=MongoDbStorage(
@@ -224,8 +226,8 @@ async def main(website_url: str, insert : bool = True, recreate: bool = False, s
             collection_name="agent_sessions",
             db_url=os.getenv("MONGO_CONNECTION_STRING"),
         ),
-        # add_history_to_messages=True,
-        # num_history_runs=3,
+        add_history_to_messages=True,
+        num_history_runs=3,
         description=dedent(
             """\
             You are the best AI Agent on the planet.
@@ -280,5 +282,5 @@ async def main(website_url: str, insert : bool = True, recreate: bool = False, s
 
 
 if __name__ == "__main__":
-    asyncio.run(main("https://www.agno.com/", insert=True, recreate=True, skip_agent=False)) 
+    asyncio.run(main("https://www.agno.com/", insert=False, recreate=False, skip_agent=False)) 
     
