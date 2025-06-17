@@ -1,0 +1,11 @@
+crawl4ai
+asyncio
+agno
+dotenv
+numpy
+sentence-transformers
+pymongo
+groq
+tavily-python
+python-docx
+pypdf
