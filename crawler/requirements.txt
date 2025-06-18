@@ -9,3 +9,4 @@ groq
 tavily-python
 python-docx
 pypdf
+serpapi
